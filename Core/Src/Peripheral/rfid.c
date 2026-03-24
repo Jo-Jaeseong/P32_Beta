@@ -207,6 +207,12 @@ void InitRFID(void)
 }
 
 void RFIDCheck(){
+	if(IsSterilantRFIDRequired()==0){
+		checkret = SterilantContainerCheck() ? 1 : 0;
+		DisplaySterilantData();
+		return;
+	}
+
 	InitRFID();
 	ReadRFID();
 	if(checkret==-2){//11.04추가

@@ -36,13 +36,17 @@ void DC3(int onoff){
 	}
 }
 
-void DC4(int onoff){
+void AirInjeValve(int onoff){
 	if(onoff==1){
 		HAL_GPIO_WritePin(GPIO_OUT4_GPIO_Port, GPIO_OUT4_Pin, GPIO_PIN_SET);
 	}
 	else{
 		HAL_GPIO_WritePin(GPIO_OUT4_GPIO_Port, GPIO_OUT4_Pin, GPIO_PIN_RESET);
 	}
+}
+
+void DC4(int onoff){
+	AirInjeValve(onoff);
 }
 
 void DC5(int onoff){

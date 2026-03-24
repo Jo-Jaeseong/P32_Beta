@@ -20,6 +20,7 @@ void DC1(int onoff);
 void DC2(int onoff);
 void DC3(int onoff);
 void DC4(int onoff);
+void AirInjeValve(int onoff);
 void DC5(int onoff);
 void DC6(int onoff);
 void DC7(int onoff);
