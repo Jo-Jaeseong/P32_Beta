@@ -45,9 +45,6 @@ void DC4(int onoff){
 	}
 }
 
-void AirInjeValve(int onoff){
-	DC4(onoff);
-}
 
 void DC5(int onoff){
 	if(onoff==1){
