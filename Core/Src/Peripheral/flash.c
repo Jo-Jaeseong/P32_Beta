@@ -34,7 +34,7 @@ unsigned char Device_First_Boot=0;
 
 
 /*장비 정보*///(30)
-unsigned char flash_MODEL_NAME[10]="FN-P20    ";
+unsigned char flash_MODEL_NAME[10]="FN-P32    ";
 unsigned char flash_SERIAL_NUMBER[10];
 unsigned char flash_DEPARTMENT_NAME[10];
 unsigned char flash_FACILITY_NAME[10];
