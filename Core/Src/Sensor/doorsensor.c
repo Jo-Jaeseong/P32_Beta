@@ -52,7 +52,7 @@ int BottleDoorCheck(){
 }
 
 int BottleCheck(){
-	return Limit3();
+	return SliderOpenCheck();
 }
 
 int VialSensorCheck(){
