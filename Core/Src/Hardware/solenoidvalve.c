@@ -34,3 +34,8 @@ void VentValve(int onoff){
 void InjectionValve(int onoff){
 	DC3(onoff);
 }
+
+//AirInjeValve
+void AirInjeValve(int onoff){
+	DC4(onoff);
+}

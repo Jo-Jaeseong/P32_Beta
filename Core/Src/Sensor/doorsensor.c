@@ -15,24 +15,15 @@
 
 extern unsigned char Running_Flag;
 
-
 int DoorCheckcnt=0;
 int DoorOpenFlag;
 int DoorOpenVentFlag;
 int DoorOpenVentCnt;
 
-// ------------------- Functions -------------------
+// 1: Bottle(RFID), 2: Vial(No RFID)
+unsigned char SterilantContainerType=STERILANT_CONTAINER_BOTTLE;
 
-/*
-int DoorHandleCheck(){
-	if(HAL_GPIO_ReadPin(DoorHandle_Port, DoorHandle_Pin)==1){
-		return 1;
-	}
-	else{
-		return 0;
-	}
-}
-*/
+// ------------------- Functions -------------------
 
 int DoorHandleCheck(){
 	if(HAL_GPIO_ReadPin(DoorHandle_Port, DoorHandle_Pin)==1){
@@ -47,21 +38,44 @@ int DoorHandleCheck(){
 	}
 }
 
-
-
 int DoorLatchCheck(){
 	return Limit1();
 	//return ValveCheck();	//테스트
 }
 
-int BottleDoorCheck(){
+int SliderOpenCheck(){
 	return Limit2();
 }
 
-int BottleCheck(){
-	return Limit3();
+int BottleDoorCheck(){
+	return SliderOpenCheck();
 }
 
+int BottleCheck(){
+	return SliderOpenCheck();
+}
+
+int VialSensorCheck(){
+	return LevelSensor1Check();
+}
+
+int SterilantContainerCheck(){
+	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+		return VialSensorCheck();
+	}
+	return BottleCheck();
+}
+
+int SterilantSliderCheck(){
+	return SliderOpenCheck();
+}
+
+int IsSterilantRFIDRequired(){
+	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+		return 0;
+	}
+	return 1;
+}
 
 void DoorSensorOpenProcess(){
 	if(Running_Flag==0){
