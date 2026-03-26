@@ -3515,7 +3515,7 @@ void LCD_60(int index, int value){	//input Value
 		        		//DisplayIcon(0x6B,0x30,1);
 					}
 					break;
-				case 0x0C ://Vent Valve
+				case 0x0C ://Air Inje Valve
 					if(HAL_GPIO_ReadPin(GPIO_OUT4_GPIO_Port, GPIO_OUT4_Pin)){
 						AirInjeValve(0);
 		        		//DisplayIcon(0x6B,0x40,0);
