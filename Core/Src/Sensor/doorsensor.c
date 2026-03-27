@@ -21,7 +21,7 @@ int DoorOpenVentFlag;
 int DoorOpenVentCnt;
 
 // 1: Bottle(RFID), 2: Vial(No RFID)
-unsigned char SterilantContainerType=STERILANT_CONTAINER_BOTTLE;
+unsigned char SterilantContainerType=STERILANT_CONTAINER_VIAL;
 
 // ------------------- Functions -------------------
 

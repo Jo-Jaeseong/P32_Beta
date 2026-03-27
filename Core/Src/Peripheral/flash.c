@@ -563,7 +563,7 @@ void Read_Flash(){
 
 	//도어 오픈 압력 설정
 	DoorOpenPressure=NormalizeWordValue(userdata[DOOROPENPRESSURE_DATA],userdata[DOOROPENPRESSURE_DATA+1],720);
-	SterilantContainerType=NormalizeFlag(userdata[STERILANT_CONTAINER_TYPE_DATA],STERILANT_CONTAINER_BOTTLE);
+	SterilantContainerType=NormalizeFlag(userdata[STERILANT_CONTAINER_TYPE_DATA],STERILANT_CONTAINER_VIAL);
 
 	/*PM 정보*///(22)
 	//사용 횟수 카운트
