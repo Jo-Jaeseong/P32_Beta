@@ -5084,20 +5084,12 @@ void DisplaySterilantData(){
 	}
 	//과수량 표기 숫자
 
-	if(checkret==1){
-		if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
-			DisplayIcon(0x02, 0x80, 92);
-			DisplayIcon(0x02, 0x90, 102);
-		}
-		else{
-			DisplayIcon(0x02, 0x80, (CurrentRFIDData.volume/2)/10);
-			DisplayIcon(0x02, 0x90, (CurrentRFIDData.volume/2)%10);
-		}
+	if(checkret==1||checkret==2||checkret==3){
+		DisplayIcon(0x22,0x50,102);
 	}
-	else{
-		DisplayIcon(0x02, 0x80, 90);
-		DisplayIcon(0x02, 0x90, 100);
-	}
+
+	DisplayIcon(0x02, 0x80, 0);
+	DisplayIcon(0x02, 0x90, 0);
 }
 
 int ReadRTC(unsigned char *year, unsigned char *month, unsigned char *day, unsigned char *week, unsigned char *hour, unsigned char *minute, unsigned char *second){
