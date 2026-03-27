@@ -5093,8 +5093,8 @@ void DisplaySterilantData(){
 		DisplayIcon(0x02, 0x90, 10);
 	}
 	else{
-		DisplayIcon(0x02, 0x80, 0);
-		DisplayIcon(0x02, 0x90, 0);
+		DisplayIcon(0x02, 0x80, (CurrentRFIDData.volume/2)/10);
+		DisplayIcon(0x02, 0x90, (CurrentRFIDData.volume/2)%10);
 	}
 }
 
