@@ -5088,8 +5088,14 @@ void DisplaySterilantData(){
 		DisplayIcon(0x22,0x50,2);
 	}
 
-	DisplayIcon(0x02, 0x80, 0);
-	DisplayIcon(0x02, 0x90, 0);
+	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+		DisplayIcon(0x02, 0x80, 10);
+		DisplayIcon(0x02, 0x90, 10);
+	}
+	else{
+		DisplayIcon(0x02, 0x80, 0);
+		DisplayIcon(0x02, 0x90, 0);
+	}
 }
 
 int ReadRTC(unsigned char *year, unsigned char *month, unsigned char *day, unsigned char *week, unsigned char *hour, unsigned char *minute, unsigned char *second){
