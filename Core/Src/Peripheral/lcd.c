@@ -4979,6 +4979,10 @@ void DisplayIcons(){
 }
 
 void DisplaySterilantData(){
+	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+		checkret = SterilantContainerCheck() ? 1 : 0;
+	}
+
 	//과수 정보 디스플레이
 	if(checkret==1){
 		char msg[10];
