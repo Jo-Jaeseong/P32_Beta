@@ -5085,7 +5085,7 @@ void DisplaySterilantData(){
 	//과수량 표기 숫자
 
 	if(checkret==1||checkret==2||checkret==3){
-		DisplayIcon(0x22,0x50,102);
+		DisplayIcon(0x22,0x50,2);
 	}
 
 	DisplayIcon(0x02, 0x80, 0);
