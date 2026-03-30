@@ -103,7 +103,7 @@ void printmain(){
 	printmsg("Clean Bio Tech Corp             \n");
 	printmsg("CYCLE Information               \n");
 	printmsg("--------------------------------\n");
-	printmsg("MODEL NO      : P20             \n");
+	printmsg("MODEL NO      : P32             \n");
 	printmsg("STERILIZER NO : FN-P100230101   \n");
 	printmsg("FACILITY NAME : SAMSUNG         \n");
 	printmsg("DEPART NAME   : DENTAL          \n");

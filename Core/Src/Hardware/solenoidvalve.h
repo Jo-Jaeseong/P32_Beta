@@ -12,5 +12,6 @@
 void VacuumValve(int onoff);
 void VentValve(int onoff);
 void InjectionValve(int onoff);
+void AirInjeValve(int onoff);
 
 #endif /* SRC_HARDWARE_SOLENOIDVALVE_H_ */

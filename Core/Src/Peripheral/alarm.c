@@ -58,6 +58,7 @@ unsigned char ErrorCheckFlag[15]={};
 
 int Alarm_Check(){
 	memset(devicealarm,0,sizeof(devicealarm));
+	int isVialMode = (SterilantContainerType==STERILANT_CONTAINER_VIAL);
 	//도어 확인
 	if(AlarmCheckFlag[0]==1){
 		if(AlarmCheckFlag[1]==1){
@@ -69,43 +70,43 @@ int Alarm_Check(){
 			}
 		}
 
-		//멸균제 RFID 확인
+		//멸균제 인식 확인 (Bottle: RFID, Vial: Sensor)
 		if(AlarmCheckFlag[2]==1){
-			if(checkret==-2){
-				devicealarm[2]=1;
+			if(isVialMode){
+				devicealarm[2]=(SterilantContainerCheck()==0);
 			}
 			else{
-				devicealarm[2]=0;
+				devicealarm[2]=(checkret==-2);
 			}
 		}
 
-		//멸균제 제조 기간 확인
+		//멸균제 제조 기간 확인 (RFID bottle only)
 		if(AlarmCheckFlag[3]==1){
-			if(checkret==3){
-				devicealarm[3]=1;
-			}
-			else{
+			if(isVialMode){
 				devicealarm[3]=0;
 			}
+			else{
+				devicealarm[3]=(checkret==3);
+			}
 		}
 
-		//멸균제 장착 기간 확인
+		//멸균제 장착 기간 확인 (RFID bottle only)
 		if(AlarmCheckFlag[4]==1){
-			if(checkret==2){
-				devicealarm[4]=1;
-			}
-			else{
+			if(isVialMode){
 				devicealarm[4]=0;
 			}
+			else{
+				devicealarm[4]=(checkret==2);
+			}
 		}
 
-		//멸균제 양 확인
+		//멸균제 양 확인 (RFID bottle only)
 		if(AlarmCheckFlag[5]==1){
-			if(CurrentRFIDData.volume>=2){
+			if(isVialMode){
 				devicealarm[5]=0;
 			}
 			else{
-				devicealarm[5]=1;
+				devicealarm[5]=(CurrentRFIDData.volume<2);
 			}
 		}
 
@@ -199,8 +200,9 @@ int Alarm_Check(){
 
 int PreAlarm_Check(){
 	//devicePreAlarm
+	int isVialMode = (SterilantContainerType==STERILANT_CONTAINER_VIAL);
 	devicePreAlarm[0]=0;
-	if(CurrentRFIDData.volume<8&&CurrentRFIDData.volume>=2){
+	if((isVialMode==0) && CurrentRFIDData.volume<8&&CurrentRFIDData.volume>=2){
 		devicePreAlarm[1]=1;
 	}
 	else{
@@ -243,19 +245,24 @@ void DisplayAlarmCheck(){
 	}
 	else if(devicealarm[2]==1){
 		DisplayPage10Char(0x07,0x10," ALARM002 ");
-		DisplayPage10Char(0x07,0x20,"NO BOTTLE ");
+		if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+			DisplayPage10Char(0x07,0x20,"NO VIAL   ");
+		}
+		else{
+			DisplayPage10Char(0x07,0x20,"NO BOTTLE ");
+		}
 	}
 	else if(devicealarm[3]==1){
 		DisplayPage10Char(0x07,0x10," ALARM003 ");
-		DisplayPage10Char(0x07,0x20,"NO BOTTLE ");
+		DisplayPage10Char(0x07,0x20,"RFID DATE ");
 	}
 	else if(devicealarm[4]==1){
 		DisplayPage10Char(0x07,0x10," ALARM004 ");
-		DisplayPage10Char(0x07,0x20,"DATEOVER  ");
+		DisplayPage10Char(0x07,0x20,"RFID OPEN ");
 	}
 	else if(devicealarm[5]==1){
 		DisplayPage10Char(0x07,0x10," ALARM005 ");
-		DisplayPage10Char(0x07,0x20,"DATEOVER2 ");
+		DisplayPage10Char(0x07,0x20,"LOW RFID  ");
 	}
 	else if(devicealarm[6]==1){
 		DisplayPage10Char(0x07,0x10," ALARM006 ");

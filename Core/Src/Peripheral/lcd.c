@@ -654,10 +654,13 @@ void DoActionButton(int key){	//0000 XXXX(key)
        		currentpage=LCD_INFO_INFORMATION_PAGE;
         	break;
 
-        case 0x12:
+        case 0x12:{
+				int sterilantPage = (SterilantContainerType==STERILANT_CONTAINER_VIAL)?LCD_INFO_STERILANT_VIAL_PAGE:LCD_INFO_STERILANT_PAGE;
+				currentpage=sterilantPage;
         	Display22page();
-       		DisplayPage(LCD_INFO_STERILANT_PAGE);
+				DisplayPage(sterilantPage);
         	break;
+        }
 
         case 0x13:
         	for(int i=0;i<6;i++){
@@ -906,10 +909,13 @@ void GoToPage(int key){	//0001 XXXX(key)
        		DisplayPage(LCD_INFO_INFORMATION_PAGE);
        		currentpage=LCD_INFO_INFORMATION_PAGE;
         	break;
-        case 0x22:
+        case 0x22:{
+				int sterilantPage = (SterilantContainerType==STERILANT_CONTAINER_VIAL)?LCD_INFO_STERILANT_VIAL_PAGE:LCD_INFO_STERILANT_PAGE;
+				currentpage=sterilantPage;
         	Display22page();
-       		DisplayPage(LCD_INFO_STERILANT_PAGE);
+				DisplayPage(sterilantPage);
         	break;
+        }
         case 0x23:
         	for(int i=0;i<6;i++){
         		temptotalcycle[i]=0;
@@ -1325,22 +1331,7 @@ void LCD_04(int index, int value){	//input Value
 						DisplayPage(LCD_SLEEPMODE_MESSAGE_PAGE);
 					}
 					else{
-						InitRFID();
-						ReadRFID();
-						if(checkret==-2){//11.04추가
-							/*
-							for(int i=0;i<3;i++){
-								ReadRFID();
-								if(checkret==1){
-									break;
-								}
-							}
-							*/
-						}
-						else if(checkret==1){
-							Write_Flash();
-						}
-						DisplaySterilantData();
+						RFIDCheck();
 						if(Alarm_Check()==0){
 							if(PreAlarm_Check()==0){
 								StartProcess();
@@ -2968,7 +2959,7 @@ void LCD_52(int index, int value){	//input Value
 					break;
 
 				case 0x06 :
-					sprintf(flash_MODEL_NAME,"FN-P20    ");
+					sprintf(flash_MODEL_NAME,"FN-P32    ");
 					sprintf(flash_SERIAL_NUMBER,"CBTP250701");
 					sprintf(flash_FACILITY_NAME,"CBT");
 					sprintf(flash_DEPARTMENT_NAME,"CleanTeam");
@@ -3530,13 +3521,13 @@ void LCD_60(int index, int value){	//input Value
 		        		//DisplayIcon(0x6B,0x30,1);
 					}
 					break;
-				case 0x0C ://Vent Valve
+				case 0x0C ://Air Inje Valve
 					if(HAL_GPIO_ReadPin(GPIO_OUT4_GPIO_Port, GPIO_OUT4_Pin)){
-						DC4(0);
+						AirInjeValve(0);
 		        		//DisplayIcon(0x6B,0x40,0);
 					}
 					else{
-						DC4(1);
+						AirInjeValve(1);
 		        		//DisplayIcon(0x6B,0x40,1);
 					}
 					break;
@@ -4984,8 +4975,8 @@ void DisplayIcons(){
 
 	DisplayIcon(0x6C,0x10,DoorHandleCheck());
 	DisplayIcon(0x6C,0x20,DoorLatchCheck());
-	DisplayIcon(0x6C,0x30,BottleCheck());
-	DisplayIcon(0x6C,0x40,BottleDoorCheck());
+	DisplayIcon(0x6C,0x30,SterilantContainerCheck());
+	DisplayIcon(0x6C,0x40,SterilantSliderCheck());
 	DisplayIcon(0x6C,0x50,LevelSensor1Check());
 	DisplayIcon(0x6C,0x60,LevelSensor2Check());
 
@@ -4993,7 +4984,26 @@ void DisplayIcons(){
 	DisplayIcon(0x02,0x70,HeaterControlMode);
 }
 
+static int previousVialMountedState=0;
+
 void DisplaySterilantData(){
+	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+		int vialMountedNow = SterilantContainerCheck();
+		if(vialMountedNow){
+			if(previousVialMountedState==0){
+				CurrentRFIDData.volume=2;
+				CurrentRFIDData.volumemax=2;
+			}
+			checkret = 1;
+		}
+		else{
+			CurrentRFIDData.volume=0;
+			CurrentRFIDData.volumemax=0;
+			checkret = 0;
+		}
+		previousVialMountedState=vialMountedNow;
+	}
+
 	//과수 정보 디스플레이
 	if(checkret==1){
 		char msg[10];
@@ -5013,7 +5023,17 @@ void DisplaySterilantData(){
 
 
 		memset(msg, 0, 10);
-		sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
+		if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+			if(CurrentRFIDData.volume>=2){
+				sprintf(msg,"01(02)    ");
+			}
+			else{
+				sprintf(msg,"00(00)    ");
+			}
+		}
+		else{
+			sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
+		}
 		DisplayPage10Char(0x22,0x40,msg);
 		//DisplayPageValue(0x22,0x40,CurrentRFIDData.volume);
 
@@ -5059,7 +5079,17 @@ void DisplaySterilantData(){
 		DisplayPage10Char(0x22,0x30,msg);
 
 		memset(msg, 0, 10);
-		sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
+		if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+			if(CurrentRFIDData.volume>=2){
+				sprintf(msg,"01(02)    ");
+			}
+			else{
+				sprintf(msg,"00(00)    ");
+			}
+		}
+		else{
+			sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
+		}
 		DisplayPage10Char(0x22,0x40,msg);
 		//DisplayPageValue(0x22,0x40,CurrentRFIDData.volume);
 
@@ -5082,7 +5112,17 @@ void DisplaySterilantData(){
 		DisplayPage10Char(0x22,0x30,msg);
 
 		memset(msg, 0, 10);
-		sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
+		if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+			if(CurrentRFIDData.volume>=2){
+				sprintf(msg,"01(02)    ");
+			}
+			else{
+				sprintf(msg,"00(00)    ");
+			}
+		}
+		else{
+			sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
+		}
 		DisplayPage10Char(0x22,0x40,msg);
 		//DisplayPageValue(0x22,0x40,CurrentRFIDData.volume);
 
@@ -5099,8 +5139,34 @@ void DisplaySterilantData(){
 	}
 	//과수량 표기 숫자
 
-	DisplayIcon(0x02, 0x80, (CurrentRFIDData.volume/2)/10);
-	DisplayIcon(0x02, 0x90, (CurrentRFIDData.volume/2)%10);
+	int vialMounted = SterilantContainerCheck();
+	int sliderClosed = SterilantSliderCheck();
+
+	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+		DisplayIcon(0x22,0x50,(vialMounted && sliderClosed) ? 2 : 0);
+	}
+
+	if(currentpage==LCD_INFO_STERILANT_PAGE || currentpage==LCD_INFO_STERILANT_VIAL_PAGE){
+		//멸균제 아이콘
+		DisplayIcon(0x22,0xA0, vialMounted ? 1 : 0);
+		//슬라이드 도어 아이콘
+		DisplayIcon(0x22,0xB0, sliderClosed ? 1 : 0);
+		//상태 아이콘
+		if(vialMounted && sliderClosed){
+			DisplayIcon(0x22,0xC0,1);
+		}
+		else{
+			DisplayIcon(0x22,0xC0,0);
+		}
+	}
+	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+		DisplayIcon(0x02, 0x80, 10);
+		DisplayIcon(0x02, 0x90, 10);
+	}
+	else{
+		DisplayIcon(0x02, 0x80, (CurrentRFIDData.volume/2)/10);
+		DisplayIcon(0x02, 0x90, (CurrentRFIDData.volume/2)%10);
+	}
 }
 
 int ReadRTC(unsigned char *year, unsigned char *month, unsigned char *day, unsigned char *week, unsigned char *hour, unsigned char *minute, unsigned char *second){
