@@ -1325,22 +1325,7 @@ void LCD_04(int index, int value){	//input Value
 						DisplayPage(LCD_SLEEPMODE_MESSAGE_PAGE);
 					}
 					else{
-						InitRFID();
-						ReadRFID();
-						if(checkret==-2){//11.04추가
-							/*
-							for(int i=0;i<3;i++){
-								ReadRFID();
-								if(checkret==1){
-									break;
-								}
-							}
-							*/
-						}
-						else if(checkret==1){
-							Write_Flash();
-						}
-						DisplaySterilantData();
+						RFIDCheck();
 						if(Alarm_Check()==0){
 							if(PreAlarm_Check()==0){
 								StartProcess();
@@ -3530,13 +3515,13 @@ void LCD_60(int index, int value){	//input Value
 		        		//DisplayIcon(0x6B,0x30,1);
 					}
 					break;
-				case 0x0C ://Vent Valve
+				case 0x0C ://Air Inje Valve
 					if(HAL_GPIO_ReadPin(GPIO_OUT4_GPIO_Port, GPIO_OUT4_Pin)){
-						DC4(0);
+						AirInjeValve(0);
 		        		//DisplayIcon(0x6B,0x40,0);
 					}
 					else{
-						DC4(1);
+						AirInjeValve(1);
 		        		//DisplayIcon(0x6B,0x40,1);
 					}
 					break;
@@ -4984,8 +4969,8 @@ void DisplayIcons(){
 
 	DisplayIcon(0x6C,0x10,DoorHandleCheck());
 	DisplayIcon(0x6C,0x20,DoorLatchCheck());
-	DisplayIcon(0x6C,0x30,BottleCheck());
-	DisplayIcon(0x6C,0x40,BottleDoorCheck());
+	DisplayIcon(0x6C,0x30,SterilantContainerCheck());
+	DisplayIcon(0x6C,0x40,SterilantSliderCheck());
 	DisplayIcon(0x6C,0x50,LevelSensor1Check());
 	DisplayIcon(0x6C,0x60,LevelSensor2Check());
 
@@ -4994,6 +4979,10 @@ void DisplayIcons(){
 }
 
 void DisplaySterilantData(){
+	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+		checkret = SterilantContainerCheck() ? 1 : 0;
+	}
+
 	//과수 정보 디스플레이
 	if(checkret==1){
 		char msg[10];
@@ -5099,8 +5088,18 @@ void DisplaySterilantData(){
 	}
 	//과수량 표기 숫자
 
-	DisplayIcon(0x02, 0x80, (CurrentRFIDData.volume/2)/10);
-	DisplayIcon(0x02, 0x90, (CurrentRFIDData.volume/2)%10);
+	if(checkret==1||checkret==2||checkret==3){
+		DisplayIcon(0x22,0x50,2);
+	}
+
+	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+		DisplayIcon(0x02, 0x80, 10);
+		DisplayIcon(0x02, 0x90, 10);
+	}
+	else{
+		DisplayIcon(0x02, 0x80, (CurrentRFIDData.volume/2)/10);
+		DisplayIcon(0x02, 0x90, (CurrentRFIDData.volume/2)%10);
+	}
 }
 
 int ReadRTC(unsigned char *year, unsigned char *month, unsigned char *day, unsigned char *week, unsigned char *hour, unsigned char *minute, unsigned char *second){

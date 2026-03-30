@@ -113,6 +113,7 @@ unsigned char flashuserCount;
 
 //도어 오픈 압력 설정
 #define DOOROPENPRESSURE_DATA		185//[2]5~6
+#define STERILANT_CONTAINER_TYPE_DATA	189//[1] 1:Bottle, 2:Vial
 
 //Alarm,Error 체크 세팅
 #define ALARMCHECKFLAG_DATA			190//[15]190~204
@@ -299,6 +300,7 @@ void Write_Flash(){
 	//도어 오픈 압력 설정
 	ucData[DOOROPENPRESSURE_DATA]=(int)(DoorOpenPressure/100);
 	ucData[DOOROPENPRESSURE_DATA+1]=(int)(DoorOpenPressure%100);
+	ucData[STERILANT_CONTAINER_TYPE_DATA]=SterilantContainerType;
 
 
 	/*PM 정보*///(22)
@@ -561,7 +563,7 @@ void Read_Flash(){
 
 	//도어 오픈 압력 설정
 	DoorOpenPressure=NormalizeWordValue(userdata[DOOROPENPRESSURE_DATA],userdata[DOOROPENPRESSURE_DATA+1],720);
-
+	SterilantContainerType=NormalizeFlag(userdata[STERILANT_CONTAINER_TYPE_DATA],STERILANT_CONTAINER_VIAL);
 
 	/*PM 정보*///(22)
 	//사용 횟수 카운트
