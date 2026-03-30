@@ -5093,20 +5093,23 @@ void DisplaySterilantData(){
 	}
 
 
-	if(SterilantContainerType==STERILANT_CONTAINER_VIAL && currentpage==LCD_INFO_STERILANT_PAGE){
+	if(currentpage==LCD_INFO_STERILANT_PAGE){
 		int vialMounted = SterilantContainerCheck();
 		int sliderClosed = SterilantSliderCheck();
 
-		DisplayIcon(0x22,0x50, vialMounted ? 442 : 440);
-		DisplayIcon(0x22,0x60, sliderClosed ? 450 : 451);
+		//멸균제 아이콘
+		DisplayIcon(0x22,0xA0, vialMounted ? 1 : 0);
+		//슬라이드 도어 아이콘
+		DisplayIcon(0x22,0xB0, sliderClosed ? 1 : 0);
+		//상태 아이콘
 		if(vialMounted && sliderClosed){
-			DisplayIcon(0x22,0x70,460);
+			DisplayIcon(0x22,0xC0,0);
 		}
 		else if(vialMounted==0){
-			DisplayIcon(0x22,0x70,461);
+			DisplayIcon(0x22,0xC0,1);
 		}
 		else{
-			DisplayIcon(0x22,0x70,462);
+			DisplayIcon(0x22,0xC0,2);
 		}
 	}
 	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
