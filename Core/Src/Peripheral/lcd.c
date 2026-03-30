@@ -2959,7 +2959,7 @@ void LCD_52(int index, int value){	//input Value
 					break;
 
 				case 0x06 :
-					sprintf(flash_MODEL_NAME,"FN-P20    ");
+					sprintf(flash_MODEL_NAME,"FN-P32    ");
 					sprintf(flash_SERIAL_NUMBER,"CBTP250701");
 					sprintf(flash_FACILITY_NAME,"CBT");
 					sprintf(flash_DEPARTMENT_NAME,"CleanTeam");
