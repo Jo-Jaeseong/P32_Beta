@@ -5094,9 +5094,6 @@ void DisplaySterilantData(){
 	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
 		DisplayIcon(0x22,0x50,(vialMounted && sliderClosed) ? 2 : 0);
 	}
-	else if(checkret==1||checkret==2||checkret==3){
-		DisplayIcon(0x22,0x50,2);
-	}
 
 	if(currentpage==LCD_INFO_STERILANT_PAGE){
 		//멸균제 아이콘
