@@ -1074,17 +1074,22 @@ void NormalMode(){
 		if((CycleData[CurrentProcess][CurrentStep].PartsSetting&0x04)==0x04){
 			LiquidFlag=0;
 		}
-		if((CycleData[CurrentProcess][CurrentStep].PartsSetting&0x08)==0x08){
-			LiquidFlag=1;
-			PeriPump(1);
-			//볼륨 카은트
-			CurrentRFIDData.volume--;
-			if(CurrentRFIDData.volume<=0){
-				CurrentRFIDData.volume=0;
+			if((CycleData[CurrentProcess][CurrentStep].PartsSetting&0x08)==0x08){
+				LiquidFlag=1;
+				PeriPump(1);
+				//볼륨 카은트
+				if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+					CurrentRFIDData.volume=0;
+				}
+				else{
+					CurrentRFIDData.volume--;
+					if(CurrentRFIDData.volume<=0){
+						CurrentRFIDData.volume=0;
+					}
+					FlashRFIDData[CurrentRFIDIndex].volume=CurrentRFIDData.volume;
+				}
+				DisplaySterilantData();
 			}
-			FlashRFIDData[CurrentRFIDIndex].volume=CurrentRFIDData.volume;
-			DisplaySterilantData();
-		}
 		else{
 			PeriPump(0);
 		}
@@ -1211,17 +1216,22 @@ void FactoryTestMode(){
 		VacuumValve((CycleData[CurrentProcess][CurrentStep].PartsSetting&0x01)==0x01);
 		VentValve((CycleData[CurrentProcess][CurrentStep].PartsSetting&0x02)==0x02);
 		InjectionValve((CycleData[CurrentProcess][CurrentStep].PartsSetting&0x04)==0x04);
-		if((CycleData[CurrentProcess][CurrentStep].PartsSetting&0x08)==0x08){
-			LiquidFlag=1;
-			PeriPump(1);
-			//볼륨 카은트
-			CurrentRFIDData.volume--;
-			if(CurrentRFIDData.volume<=0){
-				CurrentRFIDData.volume=0;
+			if((CycleData[CurrentProcess][CurrentStep].PartsSetting&0x08)==0x08){
+				LiquidFlag=1;
+				PeriPump(1);
+				//볼륨 카은트
+				if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+					CurrentRFIDData.volume=0;
+				}
+				else{
+					CurrentRFIDData.volume--;
+					if(CurrentRFIDData.volume<=0){
+						CurrentRFIDData.volume=0;
+					}
+					FlashRFIDData[CurrentRFIDIndex].volume=CurrentRFIDData.volume;
+				}
+				DisplaySterilantData();
 			}
-			FlashRFIDData[CurrentRFIDIndex].volume=CurrentRFIDData.volume;
-			DisplaySterilantData();
-		}
 		else{
 			PeriPump(0);
 		}

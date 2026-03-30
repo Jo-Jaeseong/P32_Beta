@@ -4984,9 +4984,24 @@ void DisplayIcons(){
 	DisplayIcon(0x02,0x70,HeaterControlMode);
 }
 
+static int previousVialMountedState=0;
+
 void DisplaySterilantData(){
 	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
-		checkret = SterilantContainerCheck() ? 1 : 0;
+		int vialMountedNow = SterilantContainerCheck();
+		if(vialMountedNow){
+			if(previousVialMountedState==0){
+				CurrentRFIDData.volume=2;
+				CurrentRFIDData.volumemax=2;
+			}
+			checkret = 1;
+		}
+		else{
+			CurrentRFIDData.volume=0;
+			CurrentRFIDData.volumemax=0;
+			checkret = 0;
+		}
+		previousVialMountedState=vialMountedNow;
 	}
 
 	//과수 정보 디스플레이
@@ -5009,7 +5024,12 @@ void DisplaySterilantData(){
 
 		memset(msg, 0, 10);
 		if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
-			sprintf(msg,"01(02)    ");
+			if(CurrentRFIDData.volume>=2){
+				sprintf(msg,"01(02)    ");
+			}
+			else{
+				sprintf(msg,"00(00)    ");
+			}
 		}
 		else{
 			sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
@@ -5060,7 +5080,12 @@ void DisplaySterilantData(){
 
 		memset(msg, 0, 10);
 		if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
-			sprintf(msg,"01(02)    ");
+			if(CurrentRFIDData.volume>=2){
+				sprintf(msg,"01(02)    ");
+			}
+			else{
+				sprintf(msg,"00(00)    ");
+			}
 		}
 		else{
 			sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
@@ -5088,7 +5113,12 @@ void DisplaySterilantData(){
 
 		memset(msg, 0, 10);
 		if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
-			sprintf(msg,"01(02)    ");
+			if(CurrentRFIDData.volume>=2){
+				sprintf(msg,"01(02)    ");
+			}
+			else{
+				sprintf(msg,"00(00)    ");
+			}
 		}
 		else{
 			sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
