@@ -654,10 +654,13 @@ void DoActionButton(int key){	//0000 XXXX(key)
        		currentpage=LCD_INFO_INFORMATION_PAGE;
         	break;
 
-        case 0x12:
+        case 0x12:{
+				int sterilantPage = (SterilantContainerType==STERILANT_CONTAINER_VIAL)?LCD_INFO_STERILANT_VIAL_PAGE:LCD_INFO_STERILANT_PAGE;
+				currentpage=sterilantPage;
         	Display22page();
-				DisplayPage((SterilantContainerType==STERILANT_CONTAINER_VIAL)?LCD_INFO_STERILANT_VIAL_PAGE:LCD_INFO_STERILANT_PAGE);
+				DisplayPage(sterilantPage);
         	break;
+        }
 
         case 0x13:
         	for(int i=0;i<6;i++){
@@ -906,10 +909,13 @@ void GoToPage(int key){	//0001 XXXX(key)
        		DisplayPage(LCD_INFO_INFORMATION_PAGE);
        		currentpage=LCD_INFO_INFORMATION_PAGE;
         	break;
-        case 0x22:
+        case 0x22:{
+				int sterilantPage = (SterilantContainerType==STERILANT_CONTAINER_VIAL)?LCD_INFO_STERILANT_VIAL_PAGE:LCD_INFO_STERILANT_PAGE;
+				currentpage=sterilantPage;
         	Display22page();
-				DisplayPage((SterilantContainerType==STERILANT_CONTAINER_VIAL)?LCD_INFO_STERILANT_VIAL_PAGE:LCD_INFO_STERILANT_PAGE);
+				DisplayPage(sterilantPage);
         	break;
+        }
         case 0x23:
         	for(int i=0;i<6;i++){
         		temptotalcycle[i]=0;
