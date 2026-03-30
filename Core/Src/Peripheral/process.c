@@ -301,7 +301,7 @@ void OneSecondProcess(void){
 		}
 	}
 
-	if(Running_Flag==0 && currentpage==LCD_INFO_STERILANT_PAGE){
+	if(Running_Flag==0){
 		DisplaySterilantData();
 	}
 
