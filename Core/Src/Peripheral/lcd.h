@@ -38,6 +38,7 @@
 //유저 20~
 #define LCD_INFO_INFORMATION_PAGE						21
 #define LCD_INFO_STERILANT_PAGE							22
+#define LCD_INFO_STERILANT_VIAL_PAGE						122
 #define LCD_INFO_HISTORY_PAGE							23
 #define LCD_USER_SETTING_PAGE							24
 

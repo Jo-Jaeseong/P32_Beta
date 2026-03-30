@@ -656,7 +656,7 @@ void DoActionButton(int key){	//0000 XXXX(key)
 
         case 0x12:
         	Display22page();
-       		DisplayPage(LCD_INFO_STERILANT_PAGE);
+				DisplayPage((SterilantContainerType==STERILANT_CONTAINER_VIAL)?LCD_INFO_STERILANT_VIAL_PAGE:LCD_INFO_STERILANT_PAGE);
         	break;
 
         case 0x13:
@@ -908,7 +908,7 @@ void GoToPage(int key){	//0001 XXXX(key)
         	break;
         case 0x22:
         	Display22page();
-       		DisplayPage(LCD_INFO_STERILANT_PAGE);
+				DisplayPage((SterilantContainerType==STERILANT_CONTAINER_VIAL)?LCD_INFO_STERILANT_VIAL_PAGE:LCD_INFO_STERILANT_PAGE);
         	break;
         case 0x23:
         	for(int i=0;i<6;i++){
@@ -5095,7 +5095,7 @@ void DisplaySterilantData(){
 		DisplayIcon(0x22,0x50,(vialMounted && sliderClosed) ? 2 : 0);
 	}
 
-	if(currentpage==LCD_INFO_STERILANT_PAGE){
+	if(currentpage==LCD_INFO_STERILANT_PAGE || currentpage==LCD_INFO_STERILANT_VIAL_PAGE){
 		//멸균제 아이콘
 		DisplayIcon(0x22,0xA0, vialMounted ? 1 : 0);
 		//슬라이드 도어 아이콘
