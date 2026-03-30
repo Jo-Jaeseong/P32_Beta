@@ -5103,13 +5103,10 @@ void DisplaySterilantData(){
 		DisplayIcon(0x22,0xB0, sliderClosed ? 1 : 0);
 		//상태 아이콘
 		if(vialMounted && sliderClosed){
-			DisplayIcon(0x22,0xC0,0);
-		}
-		else if(vialMounted==0){
 			DisplayIcon(0x22,0xC0,1);
 		}
 		else{
-			DisplayIcon(0x22,0xC0,2);
+			DisplayIcon(0x22,0xC0,0);
 		}
 	}
 	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
