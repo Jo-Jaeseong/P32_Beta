@@ -301,6 +301,10 @@ void OneSecondProcess(void){
 		}
 	}
 
+	if(Running_Flag==0){
+		DisplaySterilantData();
+	}
+
 	//도어 오픈 아이콘
 	if(DoorLatchCheck()==1){
 		DisplayIcon(0x02, 0x20, 1);
