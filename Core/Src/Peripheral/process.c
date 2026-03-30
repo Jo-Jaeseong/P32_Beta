@@ -301,6 +301,10 @@ void OneSecondProcess(void){
 		}
 	}
 
+	if(Running_Flag==0 && currentpage==LCD_INFO_STERILANT_PAGE){
+		DisplaySterilantData();
+	}
+
 	//도어 오픈 아이콘
 	if(DoorLatchCheck()==1){
 		DisplayIcon(0x02, 0x20, 1);
@@ -734,12 +738,18 @@ void FactoryTestStop(){
 void SelfTestModeStart(int mode){
 	SelfTestMode=mode;
 	SelfTestProcess=1;
+	if(mode==1||mode==4){
+		Fan(1);
+	}
 	EndTimer_Flag=1;
 }
 
 void SelfTestModeStop(int mode){
 	TestResult[0]=1; //정지
 	TestResult[1]=0;
+	if(mode==1||mode==4){
+		Fan(0);
+	}
 	if(mode==1){
 		if(SelfTestProcess>=1&&SelfTestProcess<20){ //가열시험 혹은 밸브 시험중 중지
 			SelfTestProcess=41;
@@ -1673,6 +1683,7 @@ void TotalSelfTest(){
 	}
 	else if(SelfTestProcess==36){//종료
 		VentValve(0);
+		Fan(0);
 		if(HeaterTestResult[0]==1&&ValveTestResult[0]==1&&VacuumTestResult[0]==1){
 			TestResult[1]=1;
 		}
@@ -1685,6 +1696,7 @@ void TotalSelfTest(){
 	}
 	else if(SelfTestProcess==40){//가열, 밸브 정지(불량 종료)
 		TestResult[1]=2;
+		Fan(0);
 		VacuumValve(0);
 		VentValve(0);
 		InjectionValve(0);
@@ -1699,6 +1711,7 @@ void TotalSelfTest(){
 	}
 	else if(SelfTestProcess==41){//가열, 밸브 정지(정지 종료)
 		TestResult[1]=0;
+		Fan(0);
 		VacuumValve(0);
 		VentValve(0);
 		InjectionValve(0);
@@ -1712,6 +1725,7 @@ void TotalSelfTest(){
 		DisplayPage(LCD_USER_TOTALTEST_COMPLETE_PAGE);
 	}
 	else if(SelfTestProcess==50){//진공 정지
+		Fan(0);
 		EndTestTimeCounter=15*10;
 		TestResult[1]=0;
 		VacuumPump(0);
@@ -1721,6 +1735,7 @@ void TotalSelfTest(){
 		EndTimeCounter=14*10;
 	}
 	else if(SelfTestProcess==51){
+		Fan(0);
 		VacuumPump(0);
 		VacuumValve(0);
 		VentValve(0);
@@ -1846,6 +1861,7 @@ void HeaterTest(){
 	}
 	else if(SelfTestProcess==41){//가열, 밸브 정지(정지 종료)
 		TestResult[1]=0;
+		Fan(0);
 
 		SelfTestMode=0;
 		EndTimeCounter=1*10;
@@ -1953,6 +1969,7 @@ void ValveTest(){
 	}
 	else if(SelfTestProcess==41){//가열, 밸브 정지(정지 종료)
 		TestResult[1]=0;
+		Fan(0);
 
 		SelfTestMode=0;
 		EndTimeCounter=1*10;
@@ -2194,6 +2211,7 @@ void VacuumTest(){
 			EndTimeCounter=13*10;
 	}
 	else if(SelfTestProcess==13){//종료
+		Fan(0);
 		VacuumPump(0);
 		VacuumValve(0);
 		VentValve(0);
@@ -2205,6 +2223,7 @@ void VacuumTest(){
 
 
 	else if(SelfTestProcess==50){//진공 정지
+		Fan(0);
 		EndTestTimeCounter=15*10;
 		TestResult[1]=0;
 		VacuumPump(0);
@@ -2214,6 +2233,7 @@ void VacuumTest(){
 		EndTimeCounter=14*10;
 	}
 	else if(SelfTestProcess==51){
+		Fan(0);
 		VacuumPump(0);
 		VacuumValve(0);
 		VentValve(0);
