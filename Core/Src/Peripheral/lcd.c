@@ -5008,7 +5008,12 @@ void DisplaySterilantData(){
 
 
 		memset(msg, 0, 10);
-		sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
+		if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+			sprintf(msg,"01(02)    ");
+		}
+		else{
+			sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
+		}
 		DisplayPage10Char(0x22,0x40,msg);
 		//DisplayPageValue(0x22,0x40,CurrentRFIDData.volume);
 
@@ -5054,7 +5059,12 @@ void DisplaySterilantData(){
 		DisplayPage10Char(0x22,0x30,msg);
 
 		memset(msg, 0, 10);
-		sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
+		if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+			sprintf(msg,"01(02)    ");
+		}
+		else{
+			sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
+		}
 		DisplayPage10Char(0x22,0x40,msg);
 		//DisplayPageValue(0x22,0x40,CurrentRFIDData.volume);
 
@@ -5077,7 +5087,12 @@ void DisplaySterilantData(){
 		DisplayPage10Char(0x22,0x30,msg);
 
 		memset(msg, 0, 10);
-		sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
+		if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+			sprintf(msg,"01(02)    ");
+		}
+		else{
+			sprintf(msg,"%-2d(%-2d)    ",CurrentRFIDData.volume/2,CurrentRFIDData.volume);
+		}
 		DisplayPage10Char(0x22,0x40,msg);
 		//DisplayPageValue(0x22,0x40,CurrentRFIDData.volume);
 
