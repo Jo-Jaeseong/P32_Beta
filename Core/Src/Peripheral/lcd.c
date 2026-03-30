@@ -5088,15 +5088,17 @@ void DisplaySterilantData(){
 	}
 	//과수량 표기 숫자
 
-	if(checkret==1||checkret==2||checkret==3){
+	int vialMounted = SterilantContainerCheck();
+	int sliderClosed = SterilantSliderCheck();
+
+	if(SterilantContainerType==STERILANT_CONTAINER_VIAL){
+		DisplayIcon(0x22,0x50,(vialMounted && sliderClosed) ? 2 : 0);
+	}
+	else if(checkret==1||checkret==2||checkret==3){
 		DisplayIcon(0x22,0x50,2);
 	}
 
-
 	if(currentpage==LCD_INFO_STERILANT_PAGE){
-		int vialMounted = SterilantContainerCheck();
-		int sliderClosed = SterilantSliderCheck();
-
 		//멸균제 아이콘
 		DisplayIcon(0x22,0xA0, vialMounted ? 1 : 0);
 		//슬라이드 도어 아이콘
